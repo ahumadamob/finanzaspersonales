@@ -1,0 +1,31 @@
+package com.ahumada.finanzaspersonales.common.dto;
+
+public class ErrorDetailDto {
+
+    private String field;
+    private String message;
+
+    public ErrorDetailDto() {
+    }
+
+    public ErrorDetailDto(String field, String message) {
+        this.field = field;
+        this.message = message;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}
