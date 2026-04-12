@@ -1,0 +1,19 @@
+# Build output
+/target/
+
+# Java
+*.class
+*.log
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# macOS
+.DS_Store
+
+# Eclipse metadata
+.classpath
+.project
+.settings/
