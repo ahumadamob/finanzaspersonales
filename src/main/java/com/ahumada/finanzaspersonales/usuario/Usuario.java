@@ -20,6 +20,12 @@ public class Usuario extends BaseEntity{
 	private String nombre;
 	
 	private boolean retirado;
+	
+	public Usuario() {}
+	
+	public Usuario(Long id) {
+		super.id = id;
+	}
 
 	public String getNombre() {
 		return nombre;
