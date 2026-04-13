@@ -22,10 +22,18 @@ The following guides illustrate how to use some features concretely:
 * [Validation](https://spring.io/guides/gs/validating-form-input/)
 * [SpringDoc OpenAPI](https://github.com/springdoc/springdoc-openapi-demos/)
 
+## Guía de desarrollo: convención de nombres de base de datos
+
+Para mantener una convención única en entidades JPA y migraciones SQL:
+
+* **Tablas**: usar siempre `snake_case` en **plural** (ej: `plazos_fijos`, `importes_monetarios`).
+* **Columnas FK** (`@JoinColumn`): usar `snake_case` con sufijo `_id` (ej: `usuario_id`, `capital_inicial_id`).
+* **Consistencia ORM/DB**: el nombre declarado en `@Table` y `@JoinColumn` debe coincidir exactamente con el esquema migrado por Flyway.
+* **Evolución de esquema**: todo cambio de nombre en tablas/columnas debe ir en una migración versionada `V<numero>__<descripcion>.sql` dentro de `src/main/resources/db/migration`.
+
 ### Maven Parent overrides
 
 Due to Maven's design, elements are inherited from the parent POM to the project POM.
 While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
-
