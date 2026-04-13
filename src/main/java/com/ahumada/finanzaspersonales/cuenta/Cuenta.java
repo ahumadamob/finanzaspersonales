@@ -28,7 +28,8 @@ public class Cuenta extends BaseEntity {
 	@NotNull
 	private Usuario usuario;
 	
-	private boolean retirado;
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	private boolean retirado = false;
 
 	public String getNombre() {
 		return nombre;
