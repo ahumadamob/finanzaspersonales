@@ -12,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -23,6 +24,8 @@ public class Transaccion extends BaseEntity {
 	@NotNull
 	private ImporteMonetario importe;
 	
+	@NotNull
+	@Column(nullable = false, name = "fecha_transaccion")
 	private LocalDateTime fechaTransaccion;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)

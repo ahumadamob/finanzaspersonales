@@ -31,7 +31,8 @@ public class ItemPresupuesto extends BaseEntity {
 	@Column(name = "fecha_vencimiento")
 	private LocalDateTime fechaVencimiento;
 	
-	private boolean consolidado;	
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	private boolean consolidado = false;	
 	
 	@Column(name = "item_referencia_id")
 	private Long itemReferenciaId;
