@@ -13,6 +13,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -30,6 +33,11 @@ public class PlazoFijo extends BaseEntity {
 	@JoinColumn(name = "capital_inicial", nullable = false)
 	@NotNull	
 	private ImporteMonetario capitalInicial;
+	
+	@NotNull
+	@DecimalMin("0.0000")
+	@DecimalMax("100.0000")
+	@Column(nullable = false, precision = 7, scale = 4)
 	private BigDecimal tasaNominalAnual;
 	
 	@Positive
