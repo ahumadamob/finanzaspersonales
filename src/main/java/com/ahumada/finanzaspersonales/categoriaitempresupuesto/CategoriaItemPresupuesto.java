@@ -5,6 +5,8 @@ import com.ahumada.finanzaspersonales.usuario.Usuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -23,8 +25,10 @@ public class CategoriaItemPresupuesto extends BaseEntity {
     @Size(max = 64)
 	private String nombre;
 	
-	
-	private TipoItemPresupuesto item;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "tipo", nullable = false, length = 16)
+	@NotNull
+	private TipoItemPresupuesto tipo;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "usuario_id", nullable = false)
@@ -41,12 +45,12 @@ public class CategoriaItemPresupuesto extends BaseEntity {
 		this.nombre = nombre;
 	}
 
-	public TipoItemPresupuesto getItem() {
-		return item;
+	public TipoItemPresupuesto getTipo() {
+		return tipo;
 	}
 
-	public void setItem(TipoItemPresupuesto item) {
-		this.item = item;
+	public void setTipo(TipoItemPresupuesto tipo) {
+		this.tipo = tipo;
 	}
 
 	public Usuario getUsuario() {
