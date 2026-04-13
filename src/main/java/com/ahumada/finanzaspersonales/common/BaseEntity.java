@@ -12,8 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -30,16 +28,6 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Column(nullable = true, name = "fecha_modificacion")
     private LocalDateTime fechaModificacion;
-    
-    @PrePersist
-    protected void onCreate() {
-        this.fechaCreacion = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.fechaModificacion = LocalDateTime.now();
-    }
 
     public Long getId() {
         return this.id;
