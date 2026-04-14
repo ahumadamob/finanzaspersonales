@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @Entity
-@Table(name = "plazos_fijo")
+@Table(name = "plazos_fijos")
 @FechasPlazoFijoValidas
 public class PlazoFijo extends BaseEntity {
 
@@ -32,7 +32,7 @@ public class PlazoFijo extends BaseEntity {
 	
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "capital_inicial", nullable = false)
+	@JoinColumn(name = "capital_inicial_id", nullable = false)
 	@NotNull	
 	private ImporteMonetario capitalInicial;
 	

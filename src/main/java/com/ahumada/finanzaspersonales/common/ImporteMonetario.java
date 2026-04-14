@@ -12,7 +12,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "importes_monetario")
+@Table(name = "importes_monetarios")
 public class ImporteMonetario extends BaseEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
