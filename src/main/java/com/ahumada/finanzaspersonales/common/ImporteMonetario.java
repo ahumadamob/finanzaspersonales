@@ -7,10 +7,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "importes_monetario")
+@Table(name = "importes_monetarios")
 public class ImporteMonetario extends BaseEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -19,6 +21,8 @@ public class ImporteMonetario extends BaseEntity {
 	private Moneda moneda;
 	
 	@NotNull
+	@DecimalMin("0.00")
+	@Column(nullable = false, precision = 19, scale = 4)
 	private BigDecimal monto;
 
 	public Moneda getMoneda() {

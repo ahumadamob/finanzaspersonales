@@ -7,17 +7,22 @@ import com.ahumada.finanzaspersonales.common.BaseEntity;
 import com.ahumada.finanzaspersonales.common.ImporteMonetario;
 import com.ahumada.finanzaspersonales.cuenta.Cuenta;
 import com.ahumada.finanzaspersonales.itempresupuesto.ItemPresupuesto;
+import com.ahumada.finanzaspersonales.plazofijo.validation.FechasPlazoFijoValidas;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @Entity
-@Table(name = "plazos_fijo")
+@Table(name = "plazos_fijos")
+@FechasPlazoFijoValidas
 public class PlazoFijo extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -27,14 +32,27 @@ public class PlazoFijo extends BaseEntity {
 	
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "capital_inicial", nullable = false)
+	@JoinColumn(name = "capital_inicial_id", nullable = false)
 	@NotNull	
 	private ImporteMonetario capitalInicial;
+	
+	@NotNull
+	@DecimalMin("0.0000")
+	@DecimalMax("100.0000")
+	@Column(nullable = false, precision = 7, scale = 4)
 	private BigDecimal tasaNominalAnual;
 	
+	@NotNull
 	@Positive
+	@Column(nullable = false, name = "plazo_dias")
 	private Integer plazoDias;
+
+	@NotNull
+	@Column(nullable = false, name = "fecha_constitucion")
 	private LocalDate fechaConstitucion;
+
+	@NotNull
+	@Column(nullable = false, name = "fecha_vencimiento")
 	private LocalDate fechaVencimiento;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)

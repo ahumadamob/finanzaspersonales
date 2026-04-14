@@ -19,7 +19,8 @@ public class Usuario extends BaseEntity{
     @Size(max = 64)
 	private String nombre;
 	
-	private boolean retirado;
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	private boolean retirado = false;
 	
 	public Usuario() {}
 	
