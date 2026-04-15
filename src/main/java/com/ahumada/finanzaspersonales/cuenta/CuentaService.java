@@ -21,7 +21,7 @@ public class CuentaService {
 	public Cuenta getById(Long id) {
 		return repo	.findByIdAndRetiradoFalse(id)
 	            	.orElseThrow(() -> new ResourceNotFoundException(
-	                "Cuenta con id: " + id + " no encontrada o retirada."));
+	                "Cuenta con id: " + id + " no encontrado o retirado."));
 	}
 	
 	public Cuenta update(Cuenta cuenta) {
