@@ -1,5 +1,6 @@
 package com.ahumada.finanzaspersonales.cuenta;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -10,25 +11,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Collections;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.ahumada.finanzaspersonales.usuario.Usuario;
 
-@WebMvcTest(CuentaController.class)
+@ExtendWith(MockitoExtension.class)
 class CuentaControllerTest {
 
-	@Autowired
+	@Mock
+	private CuentaService cuentaService;
+
+	@InjectMocks
+	private CuentaController cuentaController;
+
 	private MockMvc mockMvc;
 
-	@MockitoBean
-	private CuentaService cuentaService;
+	@BeforeEach
+	void setUp() {
+		mockMvc = MockMvcBuilders.standaloneSetup(cuentaController).build();
+	}
 
 	@Test
 	void getAll_debeMapearPathVariableUsuarioIdCorrectamente() throws Exception {
