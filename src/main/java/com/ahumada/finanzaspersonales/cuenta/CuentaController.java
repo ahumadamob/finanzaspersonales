@@ -15,26 +15,31 @@ import com.ahumada.finanzaspersonales.usuario.Usuario;
 @RestController
 @RequestMapping("/v1/cuenta")
 public class CuentaController {
-	
-	private CuentaService cuentaService;
-	
+
+	private final CuentaService cuentaService;
+
+	public CuentaController(CuentaService cuentaService) {
+		this.cuentaService = cuentaService;
+	}
+
 	@GetMapping("/{usuario_id}")
-	public ResponseEntity<ApiResponseSuccessDto<List<CuentaResponseDto>>> getAll(@PathVariable Long usuarioId){
-		
+	public ResponseEntity<ApiResponseSuccessDto<List<CuentaResponseDto>>> getAll(
+			@PathVariable("usuario_id") Long usuarioId) {
+
 		Usuario usuario = new Usuario(usuarioId);
 		CuentaMapper mapper = new CuentaMapper();
-		
+
 		List<Cuenta> cuentas = cuentaService.getAll(usuario);
-		
+
 		List<CuentaResponseDto> cuentasDto = cuentas.stream()
 				.map(mapper::toResponseDto)
 				.collect(Collectors.toList());
-		
+
 		ApiResponseSuccessDto<List<CuentaResponseDto>> response = new ApiResponseSuccessDto<List<CuentaResponseDto>>();
 		response.setSuccess(true);
 		response.setMessage("Cuentas obtenidas correctamente");
 		response.setData(cuentasDto);
-		
+
 		return ResponseEntity.ok(response);
 	}
 
