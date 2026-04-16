@@ -9,27 +9,32 @@ import com.ahumada.finanzaspersonales.common.exception.ResourceNotFoundException
 
 @Service
 public class UsuarioService {
-	
-	@Autowired
-	private UsuarioRepository repo;
 
-	public List<Usuario>getAll(){
-		return repo.findAllByRetiradoFalseOrderByNombreAsc();
-	}
-	
-	public Usuario save(Usuario usuario) {
-		return repo.save(usuario);
-	}
+    @Autowired
+    private UsuarioRepository repo;
 
-	public Usuario getById(Long id) {
-		return repo.findByIdAndRetiradoFalse(id)
-				.orElseThrow(() -> new ResourceNotFoundException(
-						"Usuario con id: " + id + " no encontrado o retirado."));
-	}
-	
-	public long count() {
-		return repo.count();
-	}
-	
-	
+    public List<Usuario> getAll() {
+        return repo.findAllByRetiradoFalseOrderByNombreAsc();
+    }
+
+    public Usuario save(Usuario usuario) {
+        return repo.save(usuario);
+    }
+
+    public Usuario save(UsuarioRequestDto dto) {
+        UsuarioMapper mapper = new UsuarioMapper();
+        Usuario entity = mapper.toEntity(dto);
+        return repo.save(entity);
+    }
+
+    public Usuario getById(Long id) {
+        return repo.findByIdAndRetiradoFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Usuario con id: " + id + " no encontrado o retirado."));
+    }
+
+    public long count() {
+        return repo.count();
+    }
+
 }
