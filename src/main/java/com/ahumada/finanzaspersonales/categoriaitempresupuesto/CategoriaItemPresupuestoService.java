@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 
 import com.ahumada.finanzaspersonales.common.exception.ResourceNotFoundException;
 import com.ahumada.finanzaspersonales.usuario.Usuario;
+import com.ahumada.finanzaspersonales.usuario.UsuarioService;
 
 @Service
 public class CategoriaItemPresupuestoService {
 
     @Autowired
     private CategoriaItemPresupuestoRepository repo;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     public List<CategoriaItemPresupuesto> getAll(Usuario usuario) {
         return repo.findAllByUsuarioAndRetiradoFalseOrderByNombreAsc(usuario);
@@ -26,6 +30,13 @@ public class CategoriaItemPresupuestoService {
 
     public CategoriaItemPresupuesto save(CategoriaItemPresupuesto categoria) {
         return repo.save(categoria);
+    }
+
+    public CategoriaItemPresupuesto save(CategoriaItemPresupuestoRequestDto dto) {
+        CategoriaItemPresupuestoMapper mapper = new CategoriaItemPresupuestoMapper();
+        Usuario usuario = usuarioService.getById(dto.getUsuarioId());
+        CategoriaItemPresupuesto entity = mapper.toEntity(dto, usuario);
+        return repo.save(entity);
     }
 
     public CategoriaItemPresupuesto update(CategoriaItemPresupuesto categoria) {
