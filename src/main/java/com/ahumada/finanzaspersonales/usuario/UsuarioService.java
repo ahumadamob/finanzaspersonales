@@ -14,7 +14,7 @@ public class UsuarioService {
 	private UsuarioRepository repo;
 
 	public List<Usuario>getAll(){
-		return repo.findAllByRetiradoFalseOrderByIdAsc();
+		return repo.findAllByRetiradoFalseOrderByNombreAsc();
 	}
 	
 	public Usuario save(Usuario usuario) {
