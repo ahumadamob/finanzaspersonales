@@ -33,11 +33,23 @@ public abstract class BaseEntity {
         return this.id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public LocalDateTime getFechaCreacion() {
         return this.fechaCreacion;
     }
 
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
     public LocalDateTime getFechaModificacion() {
         return this.fechaModificacion;
+    }
+
+    public void setFechaModificacion(LocalDateTime fechaModificacion) {
+        this.fechaModificacion = fechaModificacion;
     }
 }
