@@ -27,7 +27,20 @@ public class PresupuestoService {
         return repo.save(presupuesto);
     }
 
+    public Presupuesto save(PresupuestoRequestDto dto) {
+        PresupuestoMapper mapper = new PresupuestoMapper();
+        Presupuesto entity = mapper.toEntity(dto);
+        return repo.save(entity);
+    }
+
     public Presupuesto update(Presupuesto presupuesto) {
+        return repo.save(presupuesto);
+    }
+
+    public Presupuesto update(Long id, PresupuestoRequestDto dto) {
+        Presupuesto presupuesto = this.getById(id);
+        presupuesto.setPeriodo(dto.getPeriodo());
+        presupuesto.setEstado(dto.getEstado());
         return repo.save(presupuesto);
     }
 

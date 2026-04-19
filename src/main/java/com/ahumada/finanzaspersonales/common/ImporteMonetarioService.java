@@ -13,6 +13,9 @@ public class ImporteMonetarioService {
     @Autowired
     private ImporteMonetarioRepository repo;
 
+    @Autowired
+    private MonedaService monedaService;
+
     public List<ImporteMonetario> getAll() {
         return repo.findAllByOrderByMontoAsc();
     }
@@ -27,7 +30,21 @@ public class ImporteMonetarioService {
         return repo.save(importeMonetario);
     }
 
+    public ImporteMonetario save(ImporteMonetarioRequestDto dto) {
+        ImporteMonetarioMapper mapper = new ImporteMonetarioMapper();
+        Moneda moneda = monedaService.getById(dto.getMonedaId());
+        ImporteMonetario entity = mapper.toEntity(dto, moneda);
+        return repo.save(entity);
+    }
+
     public ImporteMonetario update(ImporteMonetario importeMonetario) {
+        return repo.save(importeMonetario);
+    }
+
+    public ImporteMonetario update(Long id, ImporteMonetarioRequestDto dto) {
+        ImporteMonetario importeMonetario = this.getById(id);
+        importeMonetario.setMoneda(monedaService.getById(dto.getMonedaId()));
+        importeMonetario.setMonto(dto.getMonto());
         return repo.save(importeMonetario);
     }
 

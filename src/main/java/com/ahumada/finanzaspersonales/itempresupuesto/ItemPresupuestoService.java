@@ -5,6 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ahumada.finanzaspersonales.categoriaitempresupuesto.CategoriaItemPresupuesto;
+import com.ahumada.finanzaspersonales.categoriaitempresupuesto.CategoriaItemPresupuestoService;
+import com.ahumada.finanzaspersonales.common.ImporteMonetario;
+import com.ahumada.finanzaspersonales.common.ImporteMonetarioService;
 import com.ahumada.finanzaspersonales.common.exception.ResourceNotFoundException;
 
 @Service
@@ -12,6 +16,12 @@ public class ItemPresupuestoService {
 
     @Autowired
     private ItemPresupuestoRepository repo;
+
+    @Autowired
+    private CategoriaItemPresupuestoService categoriaItemPresupuestoService;
+
+    @Autowired
+    private ImporteMonetarioService importeMonetarioService;
 
     public List<ItemPresupuesto> getAll() {
         return repo.findAllByOrderByFechaVencimientoAscIdAsc();
@@ -27,7 +37,25 @@ public class ItemPresupuestoService {
         return repo.save(item);
     }
 
+    public ItemPresupuesto save(ItemPresupuestoRequestDto dto) {
+        ItemPresupuestoMapper mapper = new ItemPresupuestoMapper();
+        CategoriaItemPresupuesto categoria = categoriaItemPresupuestoService.getById(dto.getCategoriaId());
+        ImporteMonetario importeMonetario = importeMonetarioService.getById(dto.getImporteMonetarioId());
+        ItemPresupuesto entity = mapper.toEntity(dto, categoria, importeMonetario);
+        return repo.save(entity);
+    }
+
     public ItemPresupuesto update(ItemPresupuesto item) {
+        return repo.save(item);
+    }
+
+    public ItemPresupuesto update(Long id, ItemPresupuestoRequestDto dto) {
+        ItemPresupuesto item = this.getById(id);
+        item.setCategoria(categoriaItemPresupuestoService.getById(dto.getCategoriaId()));
+        item.setImporteMonetario(importeMonetarioService.getById(dto.getImporteMonetarioId()));
+        item.setFechaVencimiento(dto.getFechaVencimiento());
+        item.setConsolidado(dto.isConsolidado());
+        item.setItemReferenciaId(dto.getItemReferenciaId());
         return repo.save(item);
     }
 
