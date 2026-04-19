@@ -2,6 +2,8 @@ package com.ahumada.finanzaspersonales.plazofijo;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,29 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ahumada.finanzaspersonales.common.ImporteMonetarioService;
 import com.ahumada.finanzaspersonales.common.dto.ApiResponseSuccessDto;
-import com.ahumada.finanzaspersonales.cuenta.CuentaService;
-import com.ahumada.finanzaspersonales.itempresupuesto.ItemPresupuestoService;
 
 @RestController
 @RequestMapping("/v1/plazo-fijo")
 public class PlazoFijoController {
 
     private final PlazoFijoService plazoFijoService;
-    private final CuentaService cuentaService;
-    private final ImporteMonetarioService importeMonetarioService;
-    private final ItemPresupuestoService itemPresupuestoService;
     private final PlazoFijoMapper plazoFijoMapper;
 
-    public PlazoFijoController(PlazoFijoService plazoFijoService,
-            CuentaService cuentaService,
-            ImporteMonetarioService importeMonetarioService,
-            ItemPresupuestoService itemPresupuestoService) {
+    public PlazoFijoController(PlazoFijoService plazoFijoService) {
         this.plazoFijoService = plazoFijoService;
-        this.cuentaService = cuentaService;
-        this.importeMonetarioService = importeMonetarioService;
-        this.itemPresupuestoService = itemPresupuestoService;
         this.plazoFijoMapper = new PlazoFijoMapper();
     }
 
@@ -51,24 +41,16 @@ public class PlazoFijoController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<PlazoFijoResponseDto>> create(@RequestBody PlazoFijoRequestDto requestDto) {
+    public ResponseEntity<ApiResponseSuccessDto<PlazoFijoResponseDto>> create(
+            @Valid @RequestBody PlazoFijoRequestDto requestDto) {
         PlazoFijoResponseDto data = plazoFijoMapper.toResponseDto(plazoFijoService.save(requestDto));
         return ResponseEntity.ok(success("Plazo fijo creado correctamente", data));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<PlazoFijoResponseDto>> update(@PathVariable Long id,
-            @RequestBody PlazoFijoRequestDto requestDto) {
-        PlazoFijo plazoFijo = plazoFijoService.getById(id);
-        plazoFijo.setCuenta(cuentaService.getById(requestDto.getCuentaId()));
-        plazoFijo.setCapitalInicial(importeMonetarioService.getById(requestDto.getCapitalInicialId()));
-        plazoFijo.setTasaNominalAnual(requestDto.getTasaNominalAnual());
-        plazoFijo.setPlazoDias(requestDto.getPlazoDias());
-        plazoFijo.setFechaConstitucion(requestDto.getFechaConstitucion());
-        plazoFijo.setFechaVencimiento(requestDto.getFechaVencimiento());
-        plazoFijo.setItemPresupuesto(itemPresupuestoService.getById(requestDto.getItemPresupuestoId()));
-
-        PlazoFijoResponseDto data = plazoFijoMapper.toResponseDto(plazoFijoService.update(plazoFijo));
+            @Valid @RequestBody PlazoFijoRequestDto requestDto) {
+        PlazoFijoResponseDto data = plazoFijoMapper.toResponseDto(plazoFijoService.update(id, requestDto));
         return ResponseEntity.ok(success("Plazo fijo actualizado correctamente", data));
     }
 

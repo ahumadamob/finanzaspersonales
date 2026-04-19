@@ -2,6 +2,8 @@ package com.ahumada.finanzaspersonales.transaccion;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,29 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ahumada.finanzaspersonales.common.ImporteMonetarioService;
 import com.ahumada.finanzaspersonales.common.dto.ApiResponseSuccessDto;
-import com.ahumada.finanzaspersonales.cuenta.CuentaService;
-import com.ahumada.finanzaspersonales.itempresupuesto.ItemPresupuestoService;
 
 @RestController
 @RequestMapping("/v1/transaccion")
 public class TransaccionController {
 
     private final TransaccionService transaccionService;
-    private final ImporteMonetarioService importeMonetarioService;
-    private final CuentaService cuentaService;
-    private final ItemPresupuestoService itemPresupuestoService;
     private final TransaccionMapper transaccionMapper;
 
-    public TransaccionController(TransaccionService transaccionService,
-            ImporteMonetarioService importeMonetarioService,
-            CuentaService cuentaService,
-            ItemPresupuestoService itemPresupuestoService) {
+    public TransaccionController(TransaccionService transaccionService) {
         this.transaccionService = transaccionService;
-        this.importeMonetarioService = importeMonetarioService;
-        this.cuentaService = cuentaService;
-        this.itemPresupuestoService = itemPresupuestoService;
         this.transaccionMapper = new TransaccionMapper();
     }
 
@@ -53,21 +43,15 @@ public class TransaccionController {
 
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<TransaccionResponseDto>> create(
-            @RequestBody TransaccionRequestDto requestDto) {
+            @Valid @RequestBody TransaccionRequestDto requestDto) {
         TransaccionResponseDto data = transaccionMapper.toResponseDto(transaccionService.save(requestDto));
         return ResponseEntity.ok(success("Transaccion creada correctamente", data));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<TransaccionResponseDto>> update(@PathVariable Long id,
-            @RequestBody TransaccionRequestDto requestDto) {
-        Transaccion transaccion = transaccionService.getById(id);
-        transaccion.setImporte(importeMonetarioService.getById(requestDto.getImporteId()));
-        transaccion.setFechaTransaccion(requestDto.getFechaTransaccion());
-        transaccion.setCuenta(cuentaService.getById(requestDto.getCuentaId()));
-        transaccion.setItemPresupuesto(itemPresupuestoService.getById(requestDto.getItemPresupuestoId()));
-
-        TransaccionResponseDto data = transaccionMapper.toResponseDto(transaccionService.update(transaccion));
+            @Valid @RequestBody TransaccionRequestDto requestDto) {
+        TransaccionResponseDto data = transaccionMapper.toResponseDto(transaccionService.update(id, requestDto));
         return ResponseEntity.ok(success("Transaccion actualizada correctamente", data));
     }
 

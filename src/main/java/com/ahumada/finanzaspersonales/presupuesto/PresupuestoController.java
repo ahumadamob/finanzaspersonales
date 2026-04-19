@@ -2,6 +2,8 @@ package com.ahumada.finanzaspersonales.presupuesto;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,19 +43,15 @@ public class PresupuestoController {
 
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<PresupuestoResponseDto>> create(
-            @RequestBody PresupuestoRequestDto requestDto) {
+            @Valid @RequestBody PresupuestoRequestDto requestDto) {
         PresupuestoResponseDto data = presupuestoMapper.toResponseDto(presupuestoService.save(requestDto));
         return ResponseEntity.ok(success("Presupuesto creado correctamente", data));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<PresupuestoResponseDto>> update(@PathVariable Long id,
-            @RequestBody PresupuestoRequestDto requestDto) {
-        Presupuesto presupuesto = presupuestoService.getById(id);
-        presupuesto.setPeriodo(requestDto.getPeriodo());
-        presupuesto.setEstado(requestDto.getEstado());
-
-        PresupuestoResponseDto data = presupuestoMapper.toResponseDto(presupuestoService.update(presupuesto));
+            @Valid @RequestBody PresupuestoRequestDto requestDto) {
+        PresupuestoResponseDto data = presupuestoMapper.toResponseDto(presupuestoService.update(id, requestDto));
         return ResponseEntity.ok(success("Presupuesto actualizado correctamente", data));
     }
 

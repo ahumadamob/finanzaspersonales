@@ -49,6 +49,16 @@ public class ItemPresupuestoService {
         return repo.save(item);
     }
 
+    public ItemPresupuesto update(Long id, ItemPresupuestoRequestDto dto) {
+        ItemPresupuesto item = this.getById(id);
+        item.setCategoria(categoriaItemPresupuestoService.getById(dto.getCategoriaId()));
+        item.setImporteMonetario(importeMonetarioService.getById(dto.getImporteMonetarioId()));
+        item.setFechaVencimiento(dto.getFechaVencimiento());
+        item.setConsolidado(dto.isConsolidado());
+        item.setItemReferenciaId(dto.getItemReferenciaId());
+        return repo.save(item);
+    }
+
     public void deleteById(Long id) {
         ItemPresupuesto item = this.getById(id);
         repo.delete(item);

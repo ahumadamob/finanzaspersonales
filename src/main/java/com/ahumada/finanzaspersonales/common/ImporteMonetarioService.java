@@ -41,6 +41,13 @@ public class ImporteMonetarioService {
         return repo.save(importeMonetario);
     }
 
+    public ImporteMonetario update(Long id, ImporteMonetarioRequestDto dto) {
+        ImporteMonetario importeMonetario = this.getById(id);
+        importeMonetario.setMoneda(monedaService.getById(dto.getMonedaId()));
+        importeMonetario.setMonto(dto.getMonto());
+        return repo.save(importeMonetario);
+    }
+
     public void deleteById(Long id) {
         ImporteMonetario importeMonetario = this.getById(id);
         repo.delete(importeMonetario);

@@ -47,6 +47,14 @@ public class CategoriaItemPresupuestoService {
         return repo.save(categoria);
     }
 
+    public CategoriaItemPresupuesto update(Long id, CategoriaItemPresupuestoRequestDto dto) {
+        CategoriaItemPresupuesto categoria = this.getById(id);
+        categoria.setNombre(dto.getNombre());
+        categoria.setTipo(dto.getTipo());
+        categoria.setUsuario(usuarioService.getById(dto.getUsuarioId()));
+        return repo.save(categoria);
+    }
+
     public void deleteById(Long id) {
         CategoriaItemPresupuesto categoria = this.getById(id);
         categoria.setRetirado(true);

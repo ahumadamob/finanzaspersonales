@@ -55,6 +55,18 @@ public class PlazoFijoService {
         return repo.save(plazoFijo);
     }
 
+    public PlazoFijo update(Long id, PlazoFijoRequestDto dto) {
+        PlazoFijo plazoFijo = this.getById(id);
+        plazoFijo.setCuenta(cuentaService.getById(dto.getCuentaId()));
+        plazoFijo.setCapitalInicial(importeMonetarioService.getById(dto.getCapitalInicialId()));
+        plazoFijo.setTasaNominalAnual(dto.getTasaNominalAnual());
+        plazoFijo.setPlazoDias(dto.getPlazoDias());
+        plazoFijo.setFechaConstitucion(dto.getFechaConstitucion());
+        plazoFijo.setFechaVencimiento(dto.getFechaVencimiento());
+        plazoFijo.setItemPresupuesto(itemPresupuestoService.getById(dto.getItemPresupuestoId()));
+        return repo.save(plazoFijo);
+    }
+
     public void deleteById(Long id) {
         PlazoFijo plazoFijo = this.getById(id);
         repo.delete(plazoFijo);

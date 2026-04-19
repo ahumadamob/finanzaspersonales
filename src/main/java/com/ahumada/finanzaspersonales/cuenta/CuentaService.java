@@ -48,6 +48,13 @@ public class CuentaService {
 
     }
 
+    public Cuenta update(Long id, CuentaRequestDto dto) {
+        Cuenta cuenta = this.getById(id);
+        cuenta.setNombre(dto.getNombre());
+        cuenta.setUsuario(usuarioService.getById(dto.getUsuarioId()));
+        return repo.save(cuenta);
+    }
+
     public void deleteById(Long id) {
         Cuenta cuenta = this.getById(id);
         cuenta.setRetirado(true);

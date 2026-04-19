@@ -37,6 +37,12 @@ public class UsuarioService {
         return repo.save(usuario);
     }
 
+    public Usuario update(Long id, UsuarioRequestDto dto) {
+        Usuario usuario = this.getById(id);
+        usuario.setNombre(dto.getNombre());
+        return repo.save(usuario);
+    }
+
     public void deleteById(Long id) {
         Usuario usuario = this.getById(id);
         usuario.setRetirado(true);
