@@ -2,6 +2,8 @@ package com.ahumada.finanzaspersonales.itempresupuesto;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ahumada.finanzaspersonales.categoriaitempresupuesto.CategoriaItemPresupuestoService;
-import com.ahumada.finanzaspersonales.common.ImporteMonetarioService;
 import com.ahumada.finanzaspersonales.common.dto.ApiResponseSuccessDto;
 
 @RestController
@@ -21,16 +21,10 @@ import com.ahumada.finanzaspersonales.common.dto.ApiResponseSuccessDto;
 public class ItemPresupuestoController {
 
     private final ItemPresupuestoService itemService;
-    private final CategoriaItemPresupuestoService categoriaService;
-    private final ImporteMonetarioService importeMonetarioService;
     private final ItemPresupuestoMapper itemMapper;
 
-    public ItemPresupuestoController(ItemPresupuestoService itemService,
-            CategoriaItemPresupuestoService categoriaService,
-            ImporteMonetarioService importeMonetarioService) {
+    public ItemPresupuestoController(ItemPresupuestoService itemService) {
         this.itemService = itemService;
-        this.categoriaService = categoriaService;
-        this.importeMonetarioService = importeMonetarioService;
         this.itemMapper = new ItemPresupuestoMapper();
     }
 
@@ -48,22 +42,15 @@ public class ItemPresupuestoController {
 
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<ItemPresupuestoResponseDto>> create(
-            @RequestBody ItemPresupuestoRequestDto requestDto) {
+            @Valid @RequestBody ItemPresupuestoRequestDto requestDto) {
         ItemPresupuestoResponseDto data = itemMapper.toResponseDto(itemService.save(requestDto));
         return ResponseEntity.ok(success("Item de presupuesto creado correctamente", data));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<ItemPresupuestoResponseDto>> update(@PathVariable Long id,
-            @RequestBody ItemPresupuestoRequestDto requestDto) {
-        ItemPresupuesto item = itemService.getById(id);
-        item.setCategoria(categoriaService.getById(requestDto.getCategoriaId()));
-        item.setImporteMonetario(importeMonetarioService.getById(requestDto.getImporteMonetarioId()));
-        item.setFechaVencimiento(requestDto.getFechaVencimiento());
-        item.setConsolidado(requestDto.isConsolidado());
-        item.setItemReferenciaId(requestDto.getItemReferenciaId());
-
-        ItemPresupuestoResponseDto data = itemMapper.toResponseDto(itemService.update(item));
+            @Valid @RequestBody ItemPresupuestoRequestDto requestDto) {
+        ItemPresupuestoResponseDto data = itemMapper.toResponseDto(itemService.update(id, requestDto));
         return ResponseEntity.ok(success("Item de presupuesto actualizado correctamente", data));
     }
 

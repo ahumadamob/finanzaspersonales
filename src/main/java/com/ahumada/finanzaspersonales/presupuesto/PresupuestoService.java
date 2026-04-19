@@ -37,6 +37,13 @@ public class PresupuestoService {
         return repo.save(presupuesto);
     }
 
+    public Presupuesto update(Long id, PresupuestoRequestDto dto) {
+        Presupuesto presupuesto = this.getById(id);
+        presupuesto.setPeriodo(dto.getPeriodo());
+        presupuesto.setEstado(dto.getEstado());
+        return repo.save(presupuesto);
+    }
+
     public void deleteById(Long id) {
         Presupuesto presupuesto = this.getById(id);
         repo.delete(presupuesto);

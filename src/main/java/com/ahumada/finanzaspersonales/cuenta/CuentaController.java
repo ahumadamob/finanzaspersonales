@@ -2,6 +2,8 @@ package com.ahumada.finanzaspersonales.cuenta;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,19 +54,16 @@ public class CuentaController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<CuentaResponseDto>> create(@RequestBody CuentaRequestDto requestDto) {
+    public ResponseEntity<ApiResponseSuccessDto<CuentaResponseDto>> create(
+            @Valid @RequestBody CuentaRequestDto requestDto) {
         CuentaResponseDto data = cuentaMapper.toResponseDto(cuentaService.save(requestDto));
         return ResponseEntity.ok(success("Cuenta creada correctamente", data));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<CuentaResponseDto>> update(@PathVariable Long id,
-            @RequestBody CuentaRequestDto requestDto) {
-        Cuenta cuenta = cuentaService.getById(id);
-        cuenta.setNombre(requestDto.getNombre());
-        cuenta.setUsuario(usuarioService.getById(requestDto.getUsuarioId()));
-
-        CuentaResponseDto data = cuentaMapper.toResponseDto(cuentaService.update(cuenta));
+            @Valid @RequestBody CuentaRequestDto requestDto) {
+        CuentaResponseDto data = cuentaMapper.toResponseDto(cuentaService.update(id, requestDto));
         return ResponseEntity.ok(success("Cuenta actualizada correctamente", data));
     }
 

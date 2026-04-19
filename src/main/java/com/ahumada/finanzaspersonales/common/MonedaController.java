@@ -2,6 +2,8 @@ package com.ahumada.finanzaspersonales.common;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,18 +41,16 @@ public class MonedaController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<MonedaResponseDto>> create(@RequestBody MonedaRequestDto requestDto) {
+    public ResponseEntity<ApiResponseSuccessDto<MonedaResponseDto>> create(
+            @Valid @RequestBody MonedaRequestDto requestDto) {
         MonedaResponseDto data = monedaMapper.toResponseDto(monedaService.save(requestDto));
         return ResponseEntity.ok(success("Moneda creada correctamente", data));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<MonedaResponseDto>> update(@PathVariable Long id,
-            @RequestBody MonedaRequestDto requestDto) {
-        Moneda moneda = monedaService.getById(id);
-        moneda.setNombre(requestDto.getNombre());
-
-        MonedaResponseDto data = monedaMapper.toResponseDto(monedaService.update(moneda));
+            @Valid @RequestBody MonedaRequestDto requestDto) {
+        MonedaResponseDto data = monedaMapper.toResponseDto(monedaService.update(id, requestDto));
         return ResponseEntity.ok(success("Moneda actualizada correctamente", data));
     }
 

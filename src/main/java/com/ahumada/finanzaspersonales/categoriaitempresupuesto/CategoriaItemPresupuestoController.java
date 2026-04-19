@@ -2,6 +2,8 @@ package com.ahumada.finanzaspersonales.categoriaitempresupuesto;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,19 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ahumada.finanzaspersonales.common.dto.ApiResponseSuccessDto;
-import com.ahumada.finanzaspersonales.usuario.UsuarioService;
 
 @RestController
 @RequestMapping("/v1/categoria-item-presupuesto")
 public class CategoriaItemPresupuestoController {
 
     private final CategoriaItemPresupuestoService categoriaService;
-    private final UsuarioService usuarioService;
     private final CategoriaItemPresupuestoMapper categoriaMapper;
 
-    public CategoriaItemPresupuestoController(CategoriaItemPresupuestoService categoriaService, UsuarioService usuarioService) {
+    public CategoriaItemPresupuestoController(CategoriaItemPresupuestoService categoriaService) {
         this.categoriaService = categoriaService;
-        this.usuarioService = usuarioService;
         this.categoriaMapper = new CategoriaItemPresupuestoMapper();
     }
 
@@ -45,20 +44,15 @@ public class CategoriaItemPresupuestoController {
 
     @PostMapping
     public ResponseEntity<ApiResponseSuccessDto<CategoriaItemPresupuestoResponseDto>> create(
-            @RequestBody CategoriaItemPresupuestoRequestDto requestDto) {
+            @Valid @RequestBody CategoriaItemPresupuestoRequestDto requestDto) {
         CategoriaItemPresupuestoResponseDto data = categoriaMapper.toResponseDto(categoriaService.save(requestDto));
         return ResponseEntity.ok(success("Categoria de item presupuesto creada correctamente", data));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<CategoriaItemPresupuestoResponseDto>> update(@PathVariable Long id,
-            @RequestBody CategoriaItemPresupuestoRequestDto requestDto) {
-        CategoriaItemPresupuesto categoria = categoriaService.getById(id);
-        categoria.setNombre(requestDto.getNombre());
-        categoria.setTipo(requestDto.getTipo());
-        categoria.setUsuario(usuarioService.getById(requestDto.getUsuarioId()));
-
-        CategoriaItemPresupuestoResponseDto data = categoriaMapper.toResponseDto(categoriaService.update(categoria));
+            @Valid @RequestBody CategoriaItemPresupuestoRequestDto requestDto) {
+        CategoriaItemPresupuestoResponseDto data = categoriaMapper.toResponseDto(categoriaService.update(id, requestDto));
         return ResponseEntity.ok(success("Categoria de item presupuesto actualizada correctamente", data));
     }
 

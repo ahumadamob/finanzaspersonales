@@ -37,6 +37,12 @@ public class MonedaService {
         return repo.save(moneda);
     }
 
+    public Moneda update(Long id, MonedaRequestDto dto) {
+        Moneda moneda = this.getById(id);
+        moneda.setNombre(dto.getNombre());
+        return repo.save(moneda);
+    }
+
     public void deleteById(Long id) {
         Moneda moneda = this.getById(id);
         repo.delete(moneda);

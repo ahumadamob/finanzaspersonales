@@ -55,6 +55,15 @@ public class TransaccionService {
         return repo.save(transaccion);
     }
 
+    public Transaccion update(Long id, TransaccionRequestDto dto) {
+        Transaccion transaccion = this.getById(id);
+        transaccion.setImporte(importeMonetarioService.getById(dto.getImporteId()));
+        transaccion.setFechaTransaccion(dto.getFechaTransaccion());
+        transaccion.setCuenta(cuentaService.getById(dto.getCuentaId()));
+        transaccion.setItemPresupuesto(itemPresupuestoService.getById(dto.getItemPresupuestoId()));
+        return repo.save(transaccion);
+    }
+
     public void deleteById(Long id) {
         Transaccion transaccion = this.getById(id);
         repo.delete(transaccion);

@@ -2,6 +2,8 @@ package com.ahumada.finanzaspersonales.usuario;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,18 +41,16 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponseSuccessDto<UsuarioResponseDto>> create(@RequestBody UsuarioRequestDto requestDto) {
+    public ResponseEntity<ApiResponseSuccessDto<UsuarioResponseDto>> create(
+            @Valid @RequestBody UsuarioRequestDto requestDto) {
         UsuarioResponseDto data = usuarioMapper.toResponseDto(usuarioService.save(requestDto));
         return ResponseEntity.ok(success("Usuario creado correctamente", data));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponseSuccessDto<UsuarioResponseDto>> update(@PathVariable Long id,
-            @RequestBody UsuarioRequestDto requestDto) {
-        Usuario usuario = usuarioService.getById(id);
-        usuario.setNombre(requestDto.getNombre());
-
-        UsuarioResponseDto data = usuarioMapper.toResponseDto(usuarioService.update(usuario));
+            @Valid @RequestBody UsuarioRequestDto requestDto) {
+        UsuarioResponseDto data = usuarioMapper.toResponseDto(usuarioService.update(id, requestDto));
         return ResponseEntity.ok(success("Usuario actualizado correctamente", data));
     }
 
