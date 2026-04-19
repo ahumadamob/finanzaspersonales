@@ -33,6 +33,16 @@ public class UsuarioService {
                         "Usuario con id: " + id + " no encontrado o retirado."));
     }
 
+    public Usuario update(Usuario usuario) {
+        return repo.save(usuario);
+    }
+
+    public void deleteById(Long id) {
+        Usuario usuario = this.getById(id);
+        usuario.setRetirado(true);
+        this.update(usuario);
+    }
+
     public long count() {
         return repo.count();
     }

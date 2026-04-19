@@ -18,7 +18,11 @@ public class CuentaService {
     @Autowired
     private UsuarioService usuarioService;
 
-    public List<Cuenta> getAll(Usuario usuario) {
+    public List<Cuenta> getAll() {
+        return repo.findAllByRetiradoFalseOrderByNombreAsc();
+    }
+
+    public List<Cuenta> getAllByUsuario(Usuario usuario) {
         return repo.findAllByRetiradoFalseAndUsuarioOrderByNombreAsc(usuario);
     }
 

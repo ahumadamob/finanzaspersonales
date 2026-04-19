@@ -18,7 +18,11 @@ public class CategoriaItemPresupuestoService {
     @Autowired
     private UsuarioService usuarioService;
 
-    public List<CategoriaItemPresupuesto> getAll(Usuario usuario) {
+    public List<CategoriaItemPresupuesto> getAll() {
+        return repo.findAllByRetiradoFalseOrderByNombreAsc();
+    }
+
+    public List<CategoriaItemPresupuesto> getAllByUsuario(Usuario usuario) {
         return repo.findAllByUsuarioAndRetiradoFalseOrderByNombreAsc(usuario);
     }
 
